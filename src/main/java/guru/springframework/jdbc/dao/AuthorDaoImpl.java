@@ -1,16 +1,23 @@
 package guru.springframework.jdbc.dao;
 
 import guru.springframework.jdbc.domain.Author;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by jt on 8/28/21.
  */
+@RequiredArgsConstructor
 @Component
 public class AuthorDaoImpl implements AuthorDao {
+
+    private final EntityManagerFactory emf;
+
     @Override
     public Author getById(Long id) {
-        return null;
+        return getEntityManager().find(Author.class, id);
     }
 
     @Override
@@ -31,5 +38,9 @@ public class AuthorDaoImpl implements AuthorDao {
     @Override
     public void deleteAuthorById(Long id) {
 
+    }
+
+    private EntityManager getEntityManager() {
+        return emf.createEntityManager();
     }
 }
