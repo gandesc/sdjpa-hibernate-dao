@@ -4,7 +4,6 @@ import guru.springframework.jdbc.domain.Author;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +24,16 @@ public class AuthorDaoImpl implements AuthorDao {
     @Override
     public Author findAuthorByName(String firstName, String lastName) {
         String jpqlQuery = "SELECT a FROM Author a WHERE a.firstName=:firstName AND a.lastName=:lastName";
-        TypedQuery<Author> query = getEntityManager().createQuery(jpqlQuery, Author.class);
+        EntityManager em = getEntityManager();
+        TypedQuery<Author> query = em.createQuery(jpqlQuery, Author.class);
         query.setParameter("firstName", firstName)
-            .setParameter("lastName", lastName);
+                .setParameter("lastName", lastName);
 
-        return query.getSingleResult();
+        Author author = query.getSingleResult();
+
+        em.close();
+
+        return author;
     }
 
     @Override
@@ -39,6 +43,8 @@ public class AuthorDaoImpl implements AuthorDao {
         em.getTransaction().begin();
         em.persist(author);
         em.getTransaction().commit();
+
+        em.close();
 
         return author;
     }
@@ -51,12 +57,21 @@ public class AuthorDaoImpl implements AuthorDao {
         em.flush();
         em.clear();
 
+        em.close();
+
         return author;
     }
 
     @Override
     public void deleteAuthorById(Long id) {
+        EntityManager em = getEntityManager();
 
+        em.getTransaction().begin();
+        Author author = em.find(Author.class, id);
+        em.remove(author);
+        em.getTransaction().commit();
+
+        em.close();
     }
 
     private EntityManager getEntityManager() {
