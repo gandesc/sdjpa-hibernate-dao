@@ -3,9 +3,12 @@ package guru.springframework.jdbc.dao;
 import guru.springframework.jdbc.domain.Author;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by jt on 8/28/21.
@@ -15,6 +18,16 @@ import org.springframework.stereotype.Component;
 public class AuthorDaoImpl implements AuthorDao {
 
     private final EntityManagerFactory emf;
+
+    @Override
+    public List<Author> listAuthorByLastNameLike(String lastName) {
+        try (EntityManager em = getEntityManager()) {
+            Query query = em.createQuery("SELECT a FROM Author a WHERE lastName like :lastName");
+            query.setParameter("lastName", lastName + '%');
+
+            return query.getResultList();
+        }
+    }
 
     @Override
     public Author getById(Long id) {
