@@ -4,6 +4,7 @@ import guru.springframework.jdbc.domain.Author;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -33,12 +34,24 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public Author saveNewAuthor(Author author) {
-        return null;
+        EntityManager em = getEntityManager();
+
+        em.getTransaction().begin();
+        em.persist(author);
+        em.getTransaction().commit();
+
+        return author;
     }
 
     @Override
     public Author updateAuthor(Author author) {
-        return null;
+        EntityManager em = getEntityManager();
+        em.joinTransaction();
+        em.merge(author);
+        em.flush();
+        em.clear();
+
+        return author;
     }
 
     @Override
