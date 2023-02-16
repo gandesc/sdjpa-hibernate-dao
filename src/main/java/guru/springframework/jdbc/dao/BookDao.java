@@ -1,5 +1,6 @@
 package guru.springframework.jdbc.dao;
 
+import guru.springframework.jdbc.domain.Author;
 import guru.springframework.jdbc.domain.Book;
 
 /**
@@ -9,6 +10,8 @@ public interface BookDao {
     Book getById(Long id);
 
     Book findBookByTitle(String title);
+
+    Book findByISBN(String isbn);
 
     Book saveNewBook(Book author);
 
