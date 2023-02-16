@@ -146,6 +146,14 @@ public class DaoIntegrationTest {
     }
 
     @Test
+    void testGetAllAuthors() {
+        List<Author> authors = authorDao.findAll();
+
+        assertThat(authors).isNotNull();
+        assertThat(authors.size()).isGreaterThan(0);
+    }
+
+    @Test
     void testGetAuthor() {
 
         Author author = authorDao.getById(1L);
