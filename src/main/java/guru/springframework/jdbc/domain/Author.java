@@ -2,7 +2,10 @@ package guru.springframework.jdbc.domain;
 
 import jakarta.persistence.*;
 
-@NamedQuery(name = "author_find_all", query = "FROM Author ")
+@NamedQueries({
+        @NamedQuery(name = "author_find_all", query = "FROM Author "),
+        @NamedQuery(name = "find_by_name", query = "FROM Author a WHERE a.firstName=:firstName AND a.lastName=:lastName")
+})
 @Entity
 public class Author {
 
@@ -37,3 +40,4 @@ public class Author {
         this.lastName = lastName;
     }
 }
+
