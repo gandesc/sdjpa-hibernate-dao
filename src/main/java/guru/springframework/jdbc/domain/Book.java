@@ -10,8 +10,12 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity
 @EqualsAndHashCode
+@NamedQueries({
+        @NamedQuery(name = "book_find_all", query = "FROM Book"),
+        @NamedQuery(name = "find_by_title", query = "FROM Book b WHERE b.title=:title")
+})
+@Entity
 public class Book {
 
     @Id
