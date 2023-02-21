@@ -1,6 +1,5 @@
 package guru.springframework.jdbc.dao;
 
-import guru.springframework.jdbc.domain.Author;
 import guru.springframework.jdbc.domain.Book;
 
 import java.util.List;
@@ -22,4 +21,6 @@ public interface BookDao {
     Book updateBook(Book author);
 
     void deleteBookById(Long id);
+
+    Book findBookByTitleCriteria(String title);
 }
