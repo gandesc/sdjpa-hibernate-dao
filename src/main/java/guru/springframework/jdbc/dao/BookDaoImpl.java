@@ -3,6 +3,7 @@ package guru.springframework.jdbc.dao;
 import guru.springframework.jdbc.domain.Book;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Book findBookByTitleCriteria(String title) {
-        try(EntityManager em = getEntityManager()) {
+        try (EntityManager em = getEntityManager()) {
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Book> cq = cb.createQuery(Book.class);
 
@@ -58,6 +59,17 @@ public class BookDaoImpl implements BookDao {
             query.setParameter(titleParam, title);
 
             return query.getSingleResult();
+        }
+    }
+
+    @Override
+    public Book findBookByTitleNative(String title) {
+        try (EntityManager em = getEntityManager()) {
+            Query query = em.createNativeQuery("SELECT * FROM book b WHERE b.title=:title", Book.class);
+
+            query.setParameter("title", title);
+
+            return (Book) query.getSingleResult();
         }
     }
 
