@@ -168,6 +168,13 @@ public class DaoIntegrationTest {
     }
 
     @Test
+    void testGetAuthorByNameNative() {
+        Author author = authorDao.findAuthorByNameNative("Craig", "Walls");
+
+        assertThat(author).isNotNull();
+    }
+
+    @Test
     void testGetAllAuthors() {
         List<Author> authors = authorDao.findAll();
 
